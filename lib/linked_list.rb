@@ -99,13 +99,43 @@ class LinkedList
     return true if self.size <= 1
     @size.times do |i|
       current_item = get(i, true)
-
       unless current_item.last?
         results = current_item <=> current_item.next_item
         if results == 1
           return false
         end
       end
+    end
+  end
+
+  def sort!
+    while !self.sorted?
+      0.upto(@size - 2) { |i|
+
+        current_item = get(i, true)
+        next_item = current_item.next_item
+
+        results = current_item <=> next_item
+        if results == 1
+          self.swap_with_next(i)
+        end
+      }
+    end
+  end
+
+  def swap_with_next(index)
+    current_item = get(index, true)
+    next_item = get(index + 1, true)
+    last_item = get(index + 2, true)
+    if index == 0
+      @first_item = next_item
+      @first_item.next_item = current_item
+      current_item.next_item = last_item
+    else
+      previous_item = get(index - 1, true)
+      previous_item.next_item = next_item
+      next_item.next_item = current_item
+      current_item.next_item = last_item
     end
   end
 
